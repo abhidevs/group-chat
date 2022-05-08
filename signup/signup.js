@@ -16,7 +16,8 @@ signUpForm?.addEventListener("submit", (e) => {
     .then((res) => {
       alert(res?.data?.message);
       signUpForm.reset();
-      console.log(res.data);
+      // console.log(res.data);
+      window.location.replace("../login");
     })
     .catch((err) => {
       alert(err.response.data.message);

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Group Chat</title>
+    <link rel="stylesheet" href="chat.css" />
+  </head>
+  <body>
+    <div class="chat-container" id="chatContainer">
+      <div class="top-section">
+        <h6>Welcome to Group Chat</h6>
+        <p>Chat with unknown people, start a conversation.</p>
+      </div>
+      <div class="middle-section">
+        <ul class="msg-list">
+          <li class="msg msg-general"><p>You joined the chat.</p></li>
+          <li class="msg msg-general"><p>Yash joined the chat.</p></li>
+          <li class="msg msg-sent"><p><b>You:</b> Hi there</p></li>
+          <li class="msg msg-received"><p><b>Yash:</b> Hello</p></li>
+          <li class="msg msg-sent"><p><b>You:</b> What's up?</p></li>
+          <li class="msg msg-received"><p><b>Yash:</b> All great.</p></li>
+          <li class="msg msg-received"><p><b>Yash:</b> What about you?</p></li>
+          <li class="msg msg-sent"><p><b>You:</b> It's going great too.</p></li>
+        </ul>
+      </div>
+      <div class="bottom-section">
+        <form class="send-msg-form" id="sendMsgForm">
+          <input type="text" placeholder="Type your message" />
+          <input type="submit" value="Send" />
+        </form>
+      </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.26.1/axios.min.js"></script>
+    <script src="chat.js"></script>
+  </body>
+</html>
