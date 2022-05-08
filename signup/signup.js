@@ -2,7 +2,7 @@ const signUpForm = document.getElementById("signupForm");
 
 const backendAPI = "http://localhost:3000/api";
 
-signUpForm.addEventListener("submit", (e) => {
+signUpForm?.addEventListener("submit", (e) => {
   e.preventDefault();
   const formData = new FormData(signUpForm);
 
@@ -14,7 +14,7 @@ signUpForm.addEventListener("submit", (e) => {
   axios
     .post(`${backendAPI}/auth/signup`, { name, email, phone, password })
     .then((res) => {
-      alert("Registered successfully");
+      alert(res?.data?.message);
       signUpForm.reset();
       console.log(res.data);
     })
