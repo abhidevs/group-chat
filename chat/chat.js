@@ -15,7 +15,7 @@ function getAllMessages() {
   axios
     .get(`${backendAPI}/chat/message/all`)
     .then((res) => {
-      console.log(res.data);
+      // console.log(res.data);
       listAllMessages(res.data.messages);
     })
     .catch((err) => {
@@ -31,6 +31,7 @@ function listAllMessages(messages) {
   const userEmail = JSON.parse(
     localStorage.getItem(localStorageKeyForUserEmail)
   );
+  msgList.innerHTML = "";
 
   messages.forEach((msg) => {
     const li = document.createElement("li");
@@ -47,7 +48,7 @@ function listAllMessages(messages) {
 
 window.addEventListener("DOMContentLoaded", (e) => {
   setAuthHeader();
-  getAllMessages();
+  setInterval(getAllMessages, 1000);
 });
 
 sendMsgForm?.addEventListener("submit", (e) => {
