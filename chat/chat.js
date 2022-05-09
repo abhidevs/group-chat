@@ -4,6 +4,7 @@ const msgList = document.getElementById("msgList");
 const backendAPI = "http://localhost:3000/api";
 const localStorageKeyForToken = "gc_user";
 const localStorageKeyForUserEmail = "gc_user_email";
+const localStorageKeyForMessages = "gc_messages";
 
 function setAuthHeader() {
   const token =
@@ -12,11 +13,17 @@ function setAuthHeader() {
 }
 
 function getAllMessages() {
+  const savedMsgs = JSON.parse(
+    localStorage.getItem(localStorageKeyForMessages)
+  );
+  const lastMessageId = savedMsgs?.length ? savedMsgs?.at(-1)?.id : -1;
+
   axios
-    .get(`${backendAPI}/chat/message/all`)
-    .then((res) => {
-      // console.log(res.data);
-      listAllMessages(res.data.messages);
+    .get(`${backendAPI}/chat/message/new?lastMessageId=${lastMessageId}`)
+    .then(({ data: { messages } }) => {
+      console.log(messages);
+      storeNewMsgsInLocalStorage(messages);
+      listAllMessages(messages);
     })
     .catch((err) => {
       alert(
@@ -31,7 +38,7 @@ function listAllMessages(messages) {
   const userEmail = JSON.parse(
     localStorage.getItem(localStorageKeyForUserEmail)
   );
-  msgList.innerHTML = "";
+  // msgList.innerHTML = "";
 
   messages.forEach((msg) => {
     const li = document.createElement("li");
@@ -46,8 +53,19 @@ function listAllMessages(messages) {
   });
 }
 
+function storeNewMsgsInLocalStorage(newMessages) {
+  const oldMsgs =
+    JSON.parse(localStorage.getItem(localStorageKeyForMessages)) || [];
+  const allMsgs = [...oldMsgs, ...newMessages];
+  localStorage.setItem(localStorageKeyForMessages, JSON.stringify(allMsgs));
+}
+
 window.addEventListener("DOMContentLoaded", (e) => {
   setAuthHeader();
+  const savedMsgs = JSON.parse(
+    localStorage.getItem(localStorageKeyForMessages)
+  );
+  listAllMessages(savedMsgs);
   setInterval(getAllMessages, 1000);
 });
 
@@ -56,11 +74,11 @@ sendMsgForm?.addEventListener("submit", (e) => {
   const formData = new FormData(sendMsgForm);
   let message = formData.get("message");
   if (message === "") return;
+  sendMsgForm.reset();
 
   axios
     .post(`${backendAPI}/chat/message`, { message })
     .then((res) => {
-      sendMsgForm.reset();
       console.log(res.data);
     })
     .catch((err) => {
