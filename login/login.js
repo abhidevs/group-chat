@@ -1,6 +1,7 @@
 const loginForm = document.getElementById("loginForm");
 
 const backendAPI = "http://localhost:3000/api";
+const localStorageKey = "gc_user";
 
 loginForm?.addEventListener("submit", (e) => {
   e.preventDefault();
@@ -11,9 +12,10 @@ loginForm?.addEventListener("submit", (e) => {
 
   axios
     .post(`${backendAPI}/auth/login`, { email, password })
-    .then((res) => {
+    .then(({ data }) => {
       alert("Logged in successfully");
       loginForm.reset();
+      localStorage.setItem(localStorageKey, JSON.stringify(data.accessToken));
       // console.log(res.data);
       window.location.replace("../");
     })

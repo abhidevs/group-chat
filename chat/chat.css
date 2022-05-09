@@ -16,13 +16,14 @@ body {
 
 .chat-container {
   width: 700px;
-  height: 85vh;
+  height: 90vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   border-radius: 10px;
   background-color: white;
   overflow: hidden;
+  box-shadow: 10px 10px 20px 10px rgba(50, 49, 49, 0.3);
 
   /* Glassmorphism effect */
   /* backdrop-filter: blur(13px) saturate(180%);
@@ -68,11 +69,12 @@ body {
   flex-direction: column;
   justify-content: start;
   align-items: start;
+  padding: 0 4rem;
 }
 
 .chat-container .middle-section .msg-list .msg {
-  width: 70%;
-  padding: 10px 12px;
+  width: fit-content;
+  padding: 10px 40px 10px 12px;
   margin-bottom: 15px;
   border-radius: 4px;
 }
@@ -94,6 +96,7 @@ body {
 .chat-container .middle-section .msg-list .msg.msg-received {
   background-color: #0a2139;
   color: white;
+  margin-left: auto;
 }
 
 .chat-container .middle-section .msg-list .msg p {
@@ -122,6 +125,7 @@ body {
   outline: none;
   border-radius: 4px;
   padding-left: 15px;
+  font-size: 1rem;
 }
 
 .chat-container .bottom-section .send-msg-form input[type="submit"] {

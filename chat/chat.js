@@ -1,25 +1,31 @@
-const loginForm = document.getElementById("loginForm");
+const sendMsgForm = document.getElementById("sendMsgForm");
 
 const backendAPI = "http://localhost:3000/api";
+const localStorageKey = "gc_user";
 
-loginForm?.addEventListener("submit", (e) => {
+function setAuthHeader() {
+  const token = JSON.parse(localStorage.getItem(localStorageKey)) || null;
+  if (token) axios.defaults.headers.common["authorization"] = `Bearer ${token}`;
+}
+
+window.addEventListener("DOMContentLoaded", (e) => {
+  setAuthHeader();
+});
+
+sendMsgForm?.addEventListener("submit", (e) => {
   e.preventDefault();
-  const formData = new FormData(loginForm);
-
-  let email = formData.get("email");
-  let password = formData.get("password");
+  const formData = new FormData(sendMsgForm);
+  let message = formData.get("message");
+  if (message === "") return;
 
   axios
-    .post(`${backendAPI}/auth/login`, { email, password })
+    .post(`${backendAPI}/chat/send-message`, { message })
     .then((res) => {
-      alert("Logged in successfully");
-      loginForm.reset();
-      // console.log(res.data);
-      window.location.replace("../");
+      sendMsgForm.reset();
+      console.log(res.data);
     })
     .catch((err) => {
-      alert(err.response.data.message);
-      // alert("Something went wrong");
+      alert(err.response.data.message || "Something went wrong");
       console.log(err.response);
     });
 });
