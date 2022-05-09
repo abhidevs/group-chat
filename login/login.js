@@ -1,7 +1,8 @@
 const loginForm = document.getElementById("loginForm");
 
 const backendAPI = "http://localhost:3000/api";
-const localStorageKey = "gc_user";
+const localStorageKeyForToken = "gc_user";
+const localStorageKeyForUserEmail = "gc_user_email";
 
 loginForm?.addEventListener("submit", (e) => {
   e.preventDefault();
@@ -15,7 +16,8 @@ loginForm?.addEventListener("submit", (e) => {
     .then(({ data }) => {
       alert("Logged in successfully");
       loginForm.reset();
-      localStorage.setItem(localStorageKey, JSON.stringify(data.accessToken));
+      localStorage.setItem(localStorageKeyForToken, JSON.stringify(data.accessToken));
+      localStorage.setItem(localStorageKeyForUserEmail, JSON.stringify(data.email));
       // console.log(res.data);
       window.location.replace("../");
     })
