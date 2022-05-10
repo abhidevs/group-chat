@@ -9,13 +9,68 @@
   </head>
   <body>
     <div class="chat-container" id="chatContainer">
-      <div class="top-section">
-        <h6>Welcome to Group Chat</h6>
-        <p>Chat with unknown people, start a conversation.</p>
+      <div class="chat-container-left">
+        <div class="top-section">
+          <h6>All chats</h6>
+        </div>
+        <div class="middle-section">
+          <ul class="group-list" id="groupList">
+            <!-- <li class="group"><h6>Friends Group</h6></li>
+            <li class="group"><h6>Friends Group</h6></li>
+            <li class="group"><h6>Friends Group</h6></li>
+            <li class="group"><h6>Friends Group</h6></li>
+            <li class="group"><h6>Friends Group</h6></li>
+            <li class="group"><h6>Friends Group</h6></li>
+            <li class="group"><h6>Friends Group</h6></li>
+            <li class="group"><h6>Friends Group</h6></li>
+            <li class="group"><h6>Friends Group</h6></li> -->
+          </ul>
+        </div>
+        <div class="bottom-section">
+          <button id="openCreateGroupFormBtn" class="open-create-group-form">
+            Create new group
+          </button>
+          <form class="create-group-form" id="createGroupForm">
+            <input
+              type="text"
+              name="group-name"
+              placeholder="Enter group name"
+              autofocus
+            />
+            <input type="submit" value="Create" />
+            <input type="button" value="Cancel" id="cancelCreateGroupBtn" />
+          </form>
+        </div>
       </div>
-      <div class="middle-section">
-        <ul class="msg-list" id="msgList">
-          <!-- <li class="msg msg-general"><p>You joined the chat.</p></li>
+      <div class="chat-container-right">
+        <div class="top-section">
+          <h6 id="groupName"></h6>
+          <div class="add-participants">
+            <button
+              id="openAddParticipantFormBtn"
+              class="open-add-participants-form"
+            >
+              Add Participants
+            </button>
+            <form class="add-participants-form" id="addParticipantsForm">
+              <label for="selectParticipantsInput">Select users</label>
+              <select
+                name="select-participants"
+                id="selectParticipantsInput"
+                multiple="multiple"
+              ></select>
+              <input type="submit" value="Add" />
+              <input
+                type="button"
+                value="Cancel"
+                id="cancelAddParticipantFormBtn"
+              />
+            </form>
+          </div>
+        </div>
+        <div class="middle-section">
+          <ul class="msg-list" id="msgList">
+            <!-- <li class="msg msg-general"><p>You joined the chat.</p></li>
           <li class="msg msg-general"><p>Yash joined the chat.</p></li>
           <li class="msg msg-sent">
             <p><b>You:</b> Hi there</p>
@@ -35,18 +90,19 @@
           <li class="msg msg-sent">
             <p><b>You:</b> It's going great too.</p>
           </li> -->
-        </ul>
-      </div>
-      <div class="bottom-section">
-        <form class="send-msg-form" id="sendMsgForm">
-          <input
-            type="text"
-            name="message"
-            placeholder="Type your message"
-            autofocus
-          />
-          <input type="submit" value="Send" />
-        </form>
+          </ul>
+        </div>
+        <div class="bottom-section">
+          <form class="send-msg-form" id="sendMsgForm">
+            <input
+              type="text"
+              name="message"
+              placeholder="Type your message"
+              autofocus
+            />
+            <input type="submit" value="Send" />
+          </form>
+        </div>
       </div>
     </div>
 
