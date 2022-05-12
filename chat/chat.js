@@ -31,6 +31,8 @@ const openRemoveParticipantFormBtn = document.getElementById(
 const cancelRemoveParticipantFormBtn = document.getElementById(
   "cancelRemoveParticipantFormBtn"
 );
+const uploadFile = document.getElementById("uploadFile");
+const fileInput = document.getElementById("fileInput");
 const searchInputType = document.getElementById("searchInputType");
 const searchUserInput = document.getElementById("searchUserInput");
 const searchParticipantsBtn = document.getElementById("searchParticipantsBtn");
@@ -128,7 +130,19 @@ function listAllMessages(messages) {
     li.className = `msg msg-${msgType}`;
     li.innerHTML = `<b>${
       msgType === "sent" ? "You" : msg?.user?.name?.split(" ")[0]
-    }:</b> ${msg.message}`;
+    }:</b> `;
+    const media = msg.media;
+
+    if (media) {
+      li.className += ` msg-media`;
+      if (media.type === "image") {
+        li.innerHTML += `<div class="msg-media-wrapper" ><img src="${media.url}" /></div>`;
+      } else if (media.type === "video") {
+        li.innerHTML += `<div class="msg-media-wrapper" ><video src="${media.url}" autoplay controls /></div>`;
+      }
+    } else {
+      li.innerHTML += `${msg.message}`;
+    }
 
     msgList.appendChild(li);
   });
@@ -241,7 +255,7 @@ window.addEventListener("DOMContentLoaded", (e) => {
 
   loadInitialData();
   setInterval(getNewMessages, 2000);
-  setInterval(getMyGroups, 2000);
+  setInterval(getMyGroups, 10000);
 });
 
 sendMsgForm?.addEventListener("submit", (e) => {
@@ -385,6 +399,24 @@ removeParticipantForm?.addEventListener("submit", (e) => {
     });
 
   closeRemoveParticipantForm();
+});
+
+fileInput?.addEventListener("change", (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+
+  let formData = new FormData(uploadFile);
+  formData.append("roomId", currentGroupId);
+
+  axios
+    .post(`${backendAPI}/chat/media`, formData)
+    .then((res) => {
+      console.log(res.data);
+    })
+    .catch((err) => {
+      alert(err.response?.data?.message || "Something went wrong");
+      console.log(err.response);
+    });
 });
 
 groupList?.addEventListener("click", (e) => {

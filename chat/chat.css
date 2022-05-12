@@ -113,6 +113,41 @@ body {
   border-radius: 4px;
 }
 
+.chat-container .chat-container-right .middle-section .msg-list .msg.msg-media {
+  width: 350px;
+  height: 365px;
+}
+
+.chat-container
+  .chat-container-right
+  .middle-section
+  .msg-list
+  .msg.msg-media
+  .msg-media-wrapper {
+  width: 100%;
+  height: 92%;
+  border-radius: inherit;
+  margin-top: 1%;
+}
+
+.chat-container
+  .chat-container-right
+  .middle-section
+  .msg-list
+  .msg.msg-media
+  img,
+.chat-container
+  .chat-container-right
+  .middle-section
+  .msg-list
+  .msg.msg-media
+  video {
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  object-fit: cover;
+}
+
 .chat-container
   .chat-container-right
   .middle-section
@@ -160,12 +195,47 @@ body {
   display: flex;
   align-items: center;
   padding: 10px 30px;
+  gap: 10px;
 }
 
 .chat-container .chat-container-left .bottom-section .create-group-form,
 .chat-container .chat-container-right .bottom-section .send-msg-form {
   width: 100%;
   height: 100%;
+  display: flex;
+  gap: 5px;
+}
+
+.chat-container .chat-container-right .bottom-section .send-msg-form {
+  width: 80%;
+}
+
+.chat-container
+  .chat-container-right
+  .bottom-section
+  .send-msg-form
+  input[type="text"] {
+  flex: 1;
+}
+
+.chat-container
+  .chat-container-right
+  .bottom-section
+  .upload-file-form
+  .custom-file-upload {
+  display: inline-block;
+  background: white;
+  cursor: pointer;
+  padding: 8px 12px;
+  border-radius: 5px;
+}
+
+.chat-container
+  .chat-container-right
+  .bottom-section
+  .upload-file-form
+  input[type="file"] {
+  display: none;
 }
 
 .chat-container .chat-container-left .bottom-section .create-group-form {

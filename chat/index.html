@@ -87,7 +87,10 @@
           </form>
           <form class="remove-participants-form" id="removeParticipantForm">
             <label for="selectInput">Remove Participants</label>
-            <select name="select-remove-participants" id="selectRemoveParticipantInput"></select>
+            <select
+              name="select-remove-participants"
+              id="selectRemoveParticipantInput"
+            ></select>
             <input type="submit" value="Remove" />
             <input
               type="button"
@@ -129,6 +132,17 @@
               autofocus
             />
             <input type="submit" value="Send" />
+          </form>
+          <form enctype="multipart/form-data" id="uploadFile" class="upload-file-form">
+            <label class="custom-file-upload">
+              <input
+                type="file"
+                name="media"
+                id="fileInput"
+                accept="image/*, video/mp4, video/x-m4v, video/*"
+              />
+              Send Media
+            </label>
           </form>
         </div>
       </div>
