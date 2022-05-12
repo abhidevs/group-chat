@@ -45,28 +45,56 @@
       <div class="chat-container-right">
         <div class="top-section">
           <h6 id="groupName"></h6>
-          <div class="add-participants">
-            <button
-              id="openAddParticipantFormBtn"
-              class="open-add-participants-form"
-            >
-              Add Participants
+          <div class="admin-controls" id="adminControls">
+            <button id="openAddParticipantFormBtn">Add Participants</button>
+            <button id="openAddAdminFormBtn">Add Admin</button>
+            <button id="openRemoveParticipantFormBtn">
+              Remove Participants
             </button>
-            <form class="add-participants-form" id="addParticipantsForm">
-              <label for="selectParticipantsInput">Select users</label>
-              <select
-                name="select-participants"
-                id="selectParticipantsInput"
-                multiple="multiple"
-              ></select>
-              <input type="submit" value="Add" />
-              <input
-                type="button"
-                value="Cancel"
-                id="cancelAddParticipantFormBtn"
-              />
-            </form>
           </div>
+          <form class="add-participants-form" id="addParticipantsForm">
+            <label for="searchInputType">Search by</label>
+            <select name="search-input-type" id="searchInputType">
+              <option value="text">Name</option>
+              <option value="email">Email</option>
+              <option value="tel">Phone</option>
+            </select>
+            <input
+              type="text"
+              name="search-user"
+              placeholder="Search User"
+              id="searchUserInput"
+            />
+            <input type="button" value="Search" id="searchParticipantsBtn" />
+            <label for="selectParticipantsInput">Select users</label>
+            <select
+              name="select-participants"
+              id="selectParticipantsInput"
+              multiple="multiple"
+            ></select>
+            <input type="submit" value="Add" />
+            <input
+              type="button"
+              value="Cancel"
+              id="cancelAddParticipantFormBtn"
+            />
+          </form>
+          <form class="add-admin-form" id="addAdminForm">
+            <label for="selectAdminInput">Make Admin</label>
+            <select name="select-admin" id="selectAdminInput"></select>
+            <input type="submit" value="Make Admin" />
+            <input type="button" value="Cancel" id="cancelAddAdminFormBtn" />
+          </form>
+          <form class="remove-participants-form" id="removeParticipantForm">
+            <label for="selectInput">Remove Participants</label>
+            <select name="select-remove-participants" id="selectRemoveParticipantInput"></select>
+            <input type="submit" value="Remove" />
+            <input
+              type="button"
+              value="Cancel"
+              id="cancelRemoveParticipantFormBtn"
+            />
+          </form>
         </div>
         <div class="middle-section">
           <ul class="msg-list" id="msgList">

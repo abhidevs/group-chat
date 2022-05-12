@@ -1,6 +1,8 @@
 const sendMsgForm = document.getElementById("sendMsgForm");
 const createGroupForm = document.getElementById("createGroupForm");
 const addParticipantsForm = document.getElementById("addParticipantsForm");
+const addAdminForm = document.getElementById("addAdminForm");
+const removeParticipantForm = document.getElementById("removeParticipantForm");
 const msgList = document.getElementById("msgList");
 const groupList = document.getElementById("groupList");
 const groupName = document.getElementById("groupName");
@@ -11,12 +13,28 @@ const cancelCreateGroupBtn = document.getElementById("cancelCreateGroupBtn");
 const selectParticipantsInput = document.getElementById(
   "selectParticipantsInput"
 );
+const selectAdminInput = document.getElementById("selectAdminInput");
+const selectRemoveParticipantInput = document.getElementById(
+  "selectRemoveParticipantInput"
+);
 const openAddParticipantFormBtn = document.getElementById(
   "openAddParticipantFormBtn"
 );
 const cancelAddParticipantFormBtn = document.getElementById(
   "cancelAddParticipantFormBtn"
 );
+const openAddAdminFormBtn = document.getElementById("openAddAdminFormBtn");
+const cancelAddAdminFormBtn = document.getElementById("cancelAddAdminFormBtn");
+const openRemoveParticipantFormBtn = document.getElementById(
+  "openRemoveParticipantFormBtn"
+);
+const cancelRemoveParticipantFormBtn = document.getElementById(
+  "cancelRemoveParticipantFormBtn"
+);
+const searchInputType = document.getElementById("searchInputType");
+const searchUserInput = document.getElementById("searchUserInput");
+const searchParticipantsBtn = document.getElementById("searchParticipantsBtn");
+const adminControls = document.getElementById("adminControls");
 
 const backendAPI = "http://localhost:3000/api";
 const localStorageKeyForToken = "gc_user";
@@ -40,7 +58,7 @@ function getNewMessages() {
   axios
     .get(`${backendAPI}/chat/message/new?lastMessageId=${lastMessageId}`)
     .then(({ data: { messages } }) => {
-      console.log(messages);
+      // console.log(messages);
       if (messages?.length) {
         storeNewMsgsInLocalStorage(messages);
         listAllMessages(filterMsgsByRoomId(messages, +currentGroupId));
@@ -59,9 +77,17 @@ function getMyGroups() {
   axios
     .get(`${backendAPI}/rooms/all`)
     .then(({ data: { rooms } }) => {
-      allGroups = rooms;
+      if (allGroups.length > rooms.length) {
+        allGroups = rooms;
+        setCurrentGroup(allGroups[0]?.id);
+        getMessagesFromLocalStorage();
+      } else {
+        allGroups = rooms;
+      }
+
       storeGroupsInLocalStorage(rooms);
       listAllGroups(rooms);
+      initiateAdminControls();
     })
     .catch((err) => {
       alert(
@@ -72,17 +98,18 @@ function getMyGroups() {
     });
 }
 
-function getUsers() {
+function getParticipants() {
   axios
-    .get(`${backendAPI}/users/all`)
-    .then(({ data: { users } }) => {
-      allUsers = users;
-      listParticipants(users);
+    .get(`${backendAPI}/rooms/participants?roomId=${currentGroupId}`)
+    .then(({ data: { participants } }) => {
+      // console.log(participants);
+      listParticipants(participants, selectAdminInput);
+      listParticipants(participants, selectRemoveParticipantInput);
     })
     .catch((err) => {
       alert(
         err.response?.data?.message ||
-          "Something went wrong while loading groups"
+          "Something went wrong, can't fetch participants"
       );
       console.log(err);
     });
@@ -154,7 +181,7 @@ function getMessagesFromLocalStorage() {
 
 function filterMsgsByRoomId(messages, roomId) {
   const all = messages?.filter((msg) => msg.roomId === roomId);
-  console.log({ roomId, all });
+  // console.log({ roomId, all });
   return all;
 }
 
@@ -187,7 +214,8 @@ function loadInitialData() {
       allGroups = [...rooms];
       storeGroupsInLocalStorage(allGroups);
       listAllGroups();
-      setCurrentGroup(+allGroups?.[0]?.id);
+      setCurrentGroup(+allGroups[0]?.id);
+      initiateAdminControls();
 
       storeNewMsgsInLocalStorage(messages);
       listAllMessages(filterMsgsByRoomId(messages, +currentGroupId));
@@ -195,25 +223,25 @@ function loadInitialData() {
   );
 }
 
-function listParticipants(participants) {
+function listParticipants(participants, element) {
+  element.innerHTML = "";
   participants?.forEach((p) => {
     const option = document.createElement("option");
     option.value = p.id;
     option.innerHTML = `${p.name}`;
-    selectParticipantsInput.appendChild(option);
+    element.appendChild(option);
   });
 }
 
 window.addEventListener("DOMContentLoaded", (e) => {
   setAuthHeader();
   allGroups = JSON.parse(localStorage.getItem(localStorageKeyForGroups)) || [];
-  setCurrentGroup(+allGroups?.[0]?.id);
+  setCurrentGroup(+allGroups[0]?.id);
   getMessagesFromLocalStorage();
 
   loadInitialData();
-  getUsers();
   setInterval(getNewMessages, 2000);
-  setInterval(getMyGroups, 10000);
+  setInterval(getMyGroups, 2000);
 });
 
 sendMsgForm?.addEventListener("submit", (e) => {
@@ -255,6 +283,34 @@ createGroupForm?.addEventListener("submit", (e) => {
     });
 });
 
+searchInputType?.addEventListener("change", (e) => {
+  searchUserInput.type = searchInputType.value;
+});
+
+searchParticipantsBtn?.addEventListener("click", (e) => {
+  const formData = new FormData(addParticipantsForm);
+  let searchBy = formData.get("search-input-type");
+  let searchQuery = formData.get("search-user");
+
+  let url = `${backendAPI}/users/search`;
+
+  if (searchBy === "text") url += `?name=${searchQuery}`;
+  else if (searchBy === "email") url += `?email=${searchQuery}`;
+  else url += `?phone=${searchQuery}`;
+
+  axios
+    .get(url)
+    .then(({ data: { users } }) => {
+      console.log(users);
+      allUsers = users;
+      listParticipants(users, selectParticipantsInput);
+    })
+    .catch((err) => {
+      alert("Something went wrong");
+      console.log(err.response);
+    });
+});
+
 addParticipantsForm?.addEventListener("submit", (e) => {
   e.preventDefault();
   let options = selectParticipantsInput.options;
@@ -263,31 +319,84 @@ addParticipantsForm?.addEventListener("submit", (e) => {
     if (opt.selected) selected.push(+opt.value);
   }
 
-  console.log(selected);
   if (selected.length === 0) return;
-  closeAddParticipantsForm();
 
   axios
-    .post(`${backendAPI}/rooms/add-participants`, {
+    .post(`${backendAPI}/rooms/participants`, {
       participants: selected,
       roomId: currentGroupId,
     })
     .then(({ data }) => {
       console.log(data);
       alert("Added participants successfully");
+      getParticipants();
     })
     .catch((err) => {
       alert(err.response?.data?.message || "Something went wrong");
       console.log(err.response);
     });
+
+  closeAddParticipantsForm();
+});
+
+addAdminForm?.addEventListener("submit", (e) => {
+  e.preventDefault();
+  const selected = selectAdminInput.value;
+
+  axios
+    .post(`${backendAPI}/rooms/add-admin`, {
+      roomId: currentGroupId,
+      userId: selected,
+    })
+    .then(({ data }) => {
+      console.log(data);
+      alert("Added admin successfully");
+      getParticipants();
+    })
+    .catch((err) => {
+      alert(
+        err.response?.data?.message || "Something went wrong while adding admin"
+      );
+      console.log(err.response);
+    });
+
+  closeAddAdminForm();
+});
+
+removeParticipantForm?.addEventListener("submit", (e) => {
+  e.preventDefault();
+  const selected = selectRemoveParticipantInput.value;
+
+  axios
+    .delete(
+      `${backendAPI}/rooms/participants?roomId=${currentGroupId}&userId=${selected}`
+    )
+    .then(({ data }) => {
+      console.log(data);
+      alert("removed participant successfully");
+      getParticipants();
+    })
+    .catch((err) => {
+      alert(
+        err.response?.data?.message ||
+          "Something went wrong while removing participant"
+      );
+      console.log(err.response);
+    });
+
+  closeRemoveParticipantForm();
 });
 
 groupList?.addEventListener("click", (e) => {
   let target = e.target;
   if (target.tagName === "H6") target = target.parentElement;
   if (target.className === "group") {
+    closeAddParticipantsForm();
+    closeAddAdminForm();
+    closeRemoveParticipantForm();
     setCurrentGroup(+target.id?.split("-")[1]);
     getMessagesFromLocalStorage();
+    initiateAdminControls();
   }
 });
 
@@ -316,7 +425,8 @@ cancelCreateGroupBtn?.addEventListener("click", closeCreateGroupForm);
 
 openAddParticipantFormBtn?.addEventListener("click", (e) => {
   addParticipantsForm.style.display = "flex";
-  openAddParticipantFormBtn.style.display = "none";
+  adminControls.style.display = "none";
+  groupName.style.display = "none";
 });
 
 function closeAddParticipantsForm() {
@@ -325,11 +435,61 @@ function closeAddParticipantsForm() {
   for (var opt of options) {
     opt.classList.remove("selected-option");
   }
+  searchUserInput.type = "text";
+  selectParticipantsInput.innerHTML = "";
   addParticipantsForm.style.display = "none";
-  openAddParticipantFormBtn.style.display = "block";
+  groupName.style.display = "block";
+  adminControls.style.display = "flex";
 }
 
 cancelAddParticipantFormBtn?.addEventListener(
   "click",
   closeAddParticipantsForm
 );
+
+openAddAdminFormBtn?.addEventListener("click", (e) => {
+  addAdminForm.style.display = "flex";
+  adminControls.style.display = "none";
+  groupName.style.display = "none";
+});
+
+function closeAddAdminForm() {
+  addAdminForm.reset();
+  addAdminForm.style.display = "none";
+  groupName.style.display = "block";
+  adminControls.style.display = "flex";
+}
+
+cancelAddAdminFormBtn?.addEventListener("click", closeAddAdminForm);
+
+openRemoveParticipantFormBtn?.addEventListener("click", (e) => {
+  removeParticipantForm.style.display = "flex";
+  adminControls.style.display = "none";
+  groupName.style.display = "none";
+});
+
+function closeRemoveParticipantForm() {
+  removeParticipantForm.reset();
+  removeParticipantForm.style.display = "none";
+  groupName.style.display = "block";
+  adminControls.style.display = "flex";
+}
+
+cancelRemoveParticipantFormBtn?.addEventListener(
+  "click",
+  closeRemoveParticipantForm
+);
+
+function initiateAdminControls() {
+  const curGroup = allGroups.filter((grp) => grp.id == currentGroupId)[0];
+  if (curGroup?.participant?.isAdmin) {
+    if (
+      addParticipantsForm.style.display !== "flex" &&
+      addAdminForm.style.display !== "flex" &&
+      removeParticipantForm.style.display !== "flex"
+    ) {
+      adminControls.style.display = "flex";
+      getParticipants();
+    }
+  } else adminControls.style.display = "none";
+}

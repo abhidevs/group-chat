@@ -175,15 +175,25 @@ body {
 }
 
 .chat-container .chat-container-left .bottom-section .open-create-group-form,
-.chat-container-right
-  .top-section
-  .add-participants
-  .open-add-participants-form {
+.chat-container-right .top-section .admin-controls button {
   padding: 10px 25px;
   border: none;
-  font-size: 1rem;
+  font-size: 14px;
   border-radius: 5px;
   cursor: pointer;
+}
+
+.chat-container-right .top-section .admin-controls button {
+  padding: 8px 15px;
+}
+
+.chat-container-right .top-section .admin-controls {
+  flex: 1;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 10px;
+  display: none;
 }
 
 .chat-container
@@ -216,8 +226,12 @@ body {
   .send-msg-form
   input[type="submit"],
 .chat-container-right .top-section .add-participants-form select,
-.chat-container-right .top-section .add-participants-form input {
-  width: 70px;
+.chat-container-right .top-section .add-participants-form input,
+.chat-container-right .top-section .add-admin-form select,
+.chat-container-right .top-section .add-admin-form input,
+.chat-container-right .top-section .remove-participants-form select,
+.chat-container-right .top-section .remove-participants-form input {
+  min-width: 70px;
   height: 100%;
   border: none;
   outline: none;
@@ -230,11 +244,15 @@ body {
 
 .chat-container .chat-container-left .bottom-section .create-group-form input,
 .chat-container-right .top-section .add-participants-form select,
-.chat-container-right .top-section .add-participants-form input {
+.chat-container-right .top-section .add-participants-form input,
+.chat-container-right .top-section .add-admin-form select,
+.chat-container-right .top-section .add-admin-form input,
+.chat-container-right .top-section .remove-participants-form select,
+.chat-container-right .top-section .remove-participants-form input {
   font-size: 14px !important;
 }
 
-.chat-container-right .top-section .add-participants-form {
+.chat-container-right .top-section form {
   width: fit-content;
   /* height: 100%; */
   display: flex;
@@ -244,7 +262,7 @@ body {
   display: none;
 }
 
-.chat-container-right .top-section .add-participants-form select {
+.chat-container-right .top-section .add-participants-form select[multiple] {
   height: 150px;
   width: 150px;
   position: relative;
@@ -258,16 +276,49 @@ body {
   font-size: 14px;
 }
 
-.chat-container-right .top-section .add-participants-form select option:not(:last-of-type) {
+.chat-container-right
+  .top-section
+  .add-participants-form
+  select
+  option:not(:last-of-type) {
   border-bottom: 1px solid #0a2139;
 }
 
-.chat-container-right .top-section .add-participants-form select option.selected-option {
+.chat-container-right
+  .top-section
+  .add-participants-form
+  select
+  option.selected-option {
   background-color: #26c281;
   color: white;
 }
 
-.chat-container-right .top-section .add-participants-form input {
-  height: 36px;
-  width: 60px;
+.chat-container-right .top-section .add-participants-form input,
+.chat-container-right .top-section .add-participants-form select {
+  min-width: 60px;
+}
+
+.chat-container-right .top-section .add-participants-form input,
+.chat-container-right .top-section .add-participants-form select,
+.chat-container-right .top-section .add-admin-form select,
+.chat-container-right .top-section .add-admin-form input,
+.chat-container-right .top-section .remove-participants-form select,
+.chat-container-right .top-section .remove-participants-form input {
+  height: 32px;
+}
+
+.chat-container-right
+  .top-section
+  .add-participants-form
+  select#searchInputType {
+  width: 80px;
+  padding-left: 10px;
+}
+
+.chat-container-right
+  .top-section
+  .add-participants-form
+  input#searchUserInput {
+  width: 150px;
+  padding-left: 10px;
 }
