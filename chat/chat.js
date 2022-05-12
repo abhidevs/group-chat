@@ -254,8 +254,8 @@ window.addEventListener("DOMContentLoaded", (e) => {
   getMessagesFromLocalStorage();
 
   loadInitialData();
-  // setInterval(getNewMessages, 2000);
-  // setInterval(getMyGroups, 10000);
+  setInterval(getNewMessages, 2000);
+  setInterval(getMyGroups, 10000);
 });
 
 sendMsgForm?.addEventListener("submit", (e) => {
