@@ -31,6 +31,12 @@
         />
         <a href="./forgotpassword.html">Forgot password?</a>
         <button type="submit">Login</button>
+        <div
+          id="g_id_onload"
+          data-client_id="1004099560185-v610v6f1vsps8q2qnb8v7defp6n7clmt.apps.googleusercontent.com"
+          data-callback="handleCredentialResponse"
+        ></div>
+        <div class="g_id_signin" data-type="standard"></div>
       </form>
       <div class="login-bottom-row">
         <p>Don't have an Account?</p>
@@ -39,6 +45,8 @@
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.26.1/axios.min.js"></script>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
     <script src="login.js"></script>
+    <script src="loginwithgoogle.js"></script>
   </body>
 </html>
